@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: bookinfo
+spec:
+  generators:
+  - list:
+      elements:
+      - cluster: cluster2
+        ns: default
+      - cluster: cluster3
+        ns: default
+  template:
+    metadata:
+      name: '{{cluster}}-bookinfo'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/king607267/bookinfo.git
+        targetRevision: HEAD
+        path: .
+      destination:
+        name: '{{cluster}}'
+        namespace: '{{ns}}'
